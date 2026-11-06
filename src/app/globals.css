@@ -1,0 +1,139 @@
+@import "tailwindcss";
+
+/* Colour tokens. Dark is the default; light applies with data-theme="light" on <html>. */
+:root {
+  --bg: #0f172a;
+  --bg-2: #0b1222;
+  --surface: rgb(30 41 59 / 0.55);
+  --surface-solid: #1e293b;
+  --surface-2: rgb(51 65 85 / 0.45);
+  --line: rgb(148 163 184 / 0.16);
+  --line-strong: rgb(148 163 184 / 0.3);
+  --fg: #e2e8f0;
+  --muted: #94a3b8;
+  --primary: #6366f1;
+  --secondary: #8b5cf6;
+  --accent: #f59e0b;
+  --success: #10b981;
+  --danger: #f43f5e;
+  --glow: rgb(99 102 241 / 0.35);
+  color-scheme: dark;
+}
+:root[data-theme="light"] {
+  --bg: #f8fafc;
+  --bg-2: #eef2ff;
+  --surface: rgb(255 255 255 / 0.75);
+  --surface-solid: #ffffff;
+  --surface-2: rgb(241 245 249 / 0.9);
+  --line: rgb(15 23 42 / 0.1);
+  --line-strong: rgb(15 23 42 / 0.2);
+  --fg: #1e293b;
+  --muted: #64748b;
+  --primary: #4f46e5;
+  --secondary: #7c3aed;
+  --accent: #d97706;
+  --success: #059669;
+  --danger: #e11d48;
+  --glow: rgb(99 102 241 / 0.18);
+  color-scheme: light;
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-bg-2: var(--bg-2);
+  --color-surface: var(--surface);
+  --color-surface-solid: var(--surface-solid);
+  --color-surface-2: var(--surface-2);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+  --color-fg: var(--fg);
+  --color-muted: var(--muted);
+  --color-primary: var(--primary);
+  --color-secondary: var(--secondary);
+  --color-accent: var(--accent);
+  --color-success: var(--success);
+  --color-danger: var(--danger);
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-jetbrains), ui-monospace, SFMono-Regular, monospace;
+}
+
+html {
+  background: var(--bg);
+}
+body {
+  background:
+    radial-gradient(1200px 600px at 10% -10%, rgb(99 102 241 / 0.16), transparent 60%),
+    radial-gradient(900px 500px at 100% 0%, rgb(139 92 246 / 0.12), transparent 60%),
+    var(--bg);
+  background-attachment: fixed;
+  color: var(--fg);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+@layer components {
+  .glass {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+  }
+  .text-gradient {
+    background: linear-gradient(90deg, var(--primary), var(--secondary) 50%, var(--accent));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .bg-brand {
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+  }
+  .bg-gold {
+    background: linear-gradient(135deg, #fbbf24, var(--accent));
+  }
+  .btn {
+    @apply inline-flex min-h-11 items-center justify-center gap-2 rounded-xl px-4 text-sm font-semibold transition
+      focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary disabled:cursor-not-allowed disabled:opacity-50;
+  }
+  .btn-primary {
+    @apply btn bg-brand text-white shadow-lg shadow-primary/25 hover:brightness-110 active:scale-[0.98];
+  }
+  .btn-gold {
+    @apply btn bg-gold text-slate-900 shadow-lg shadow-accent/25 hover:brightness-105 active:scale-[0.98];
+  }
+  .btn-ghost {
+    @apply btn border border-line bg-surface-2 text-fg hover:border-line-strong hover:bg-surface;
+  }
+  .input {
+    @apply min-h-11 w-full rounded-xl border border-line bg-surface-2 px-3 text-sm text-fg placeholder:text-muted/70
+      focus:border-primary focus:ring-2 focus:ring-primary/30 focus:outline-none;
+  }
+  .label {
+    @apply mb-1.5 block text-xs font-medium tracking-wide text-muted uppercase;
+  }
+  .card {
+    @apply glass rounded-2xl p-5 shadow-xl shadow-black/5;
+  }
+  .chip {
+    @apply inline-flex items-center gap-1 rounded-full border border-line bg-surface-2 px-2.5 py-1 text-xs font-medium;
+  }
+}
+
+.skeleton {
+  background: linear-gradient(90deg, var(--surface-2), var(--line-strong), var(--surface-2));
+  background-size: 200% 100%;
+  animation: shimmer 1.4s infinite;
+  border-radius: 0.75rem;
+}
+@keyframes shimmer {
+  to {
+    background-position: -200% 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
