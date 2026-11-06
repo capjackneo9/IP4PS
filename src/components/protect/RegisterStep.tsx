@@ -1,7 +1,8 @@
 "use client";
 import { CheckCircle2, ExternalLink, Loader2, RotateCcw, XCircle } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
-import { BaseError, ContractFunctionRevertedError, parseEventLogs, UserRejectedRequestError, type Address, type Hex } from "viem";
+import { parseEventLogs, type Address, type Hex } from "viem";
+import { explainError } from "@/lib/errors";
 import { useWriteContract } from "wagmi";
 import { simulateContract, waitForTransactionReceipt } from "wagmi/actions";
 import { explorerTx, type NetworkInfo } from "@/lib/chains";
@@ -21,18 +22,6 @@ export interface Registration {
 
 const STEPS = ["Preparing transaction", "Awaiting wallet confirmation", "Broadcasting to network", "Waiting for confirmation"];
 
-export function explainError(e: unknown): string {
-  if (e instanceof BaseError) {
-    if (e.walk((x) => x instanceof UserRejectedRequestError)) return "You rejected the request in your wallet.";
-    const revert = e.walk((x) => x instanceof ContractFunctionRevertedError) as ContractFunctionRevertedError | null;
-    const name = revert?.data?.errorName;
-    if (name === "AlreadyRegistered") return "One of these files is already registered on-chain, so it cannot be registered again.";
-    if (name) return `The registry refused the transaction: ${name}.`;
-    if (/insufficient funds/i.test(e.message)) return "Your wallet does not have enough funds to pay the gas fee.";
-    return e.shortMessage;
-  }
-  return e instanceof Error ? e.message : "Something went wrong.";
-}
 
 export function RegisterStep({
   args,

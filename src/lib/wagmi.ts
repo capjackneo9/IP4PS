@@ -10,7 +10,7 @@ import {
 } from "@rainbow-me/rainbowkit/wallets";
 import type { Chain } from "viem";
 import { createConfig, http, type CreateConnectorFn } from "wagmi";
-import { mock } from "wagmi/connectors";
+import { mock } from "@wagmi/core";
 import { NETWORKS } from "./chains";
 
 export const WALLETCONNECT_PROJECT_ID = process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID ?? "";
@@ -31,7 +31,9 @@ const walletConnectors = connectorsForWallets(
   appInfo,
 );
 
-const chains = NETWORKS.map((n) => n.chain) as [Chain, ...Chain[]];
+// The test wallet signs on the local chain, so it must be the first (default) chain in test mode.
+const ordered = E2E_MOCK_WALLET ? [...NETWORKS].sort((a, b) => Number(b.key === "local") - Number(a.key === "local")) : NETWORKS;
+const chains = ordered.map((n) => n.chain) as [Chain, ...Chain[]];
 
 const connectors: CreateConnectorFn[] = [...walletConnectors];
 if (E2E_MOCK_WALLET) {

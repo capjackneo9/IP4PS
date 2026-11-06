@@ -4,8 +4,17 @@ const nextConfig: NextConfig = {
   poweredByHeader: false,
   reactStrictMode: true,
   // wagmi/WalletConnect pull in optional Node-only loggers that the browser bundle must not try to resolve.
+  // The Coinbase SDK (pulled in by the wallet connectors) optionally imports x402 payment packages IP4PS never uses.
   webpack: (config) => {
     config.externals.push("pino-pretty", "lokijs", "encoding");
+    config.resolve.alias = {
+      ...config.resolve.alias,
+      "@x402/core/client": false,
+      "@x402/evm": false,
+      "@x402/evm/exact/client": false,
+      "@x402/evm/upto/client": false,
+      "@x402/svm/exact/client": false,
+    };
     return config;
   },
   async headers() {

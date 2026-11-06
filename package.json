@@ -2,7 +2,7 @@
   "name": "ip4ps",
   "version": "0.1.0",
   "private": true,
-  "description": "IP4PS — Intellectual Property 4 Pillars System: blockchain-backed IP protection for independent artists",
+  "description": "IP4PS \u2014 Intellectual Property 4 Pillars System: blockchain-backed IP protection for independent artists",
   "scripts": {
     "dev": "next dev -p 3100",
     "build": "next build",
@@ -13,11 +13,15 @@
     "contracts:compile": "tsx contracts/scripts/compile.ts",
     "contracts:test": "tsx contracts/scripts/compile.ts && vitest run --config vitest.contracts.config.ts",
     "chain": "hardhat node --hostname 127.0.0.1 --port 8545",
-    "contracts:deploy": "tsx contracts/scripts/deploy.ts"
+    "contracts:deploy": "tsx contracts/scripts/deploy.ts",
+    "test:all": "vitest run && npm run contracts:test",
+    "stub:ipfs": "node tests/e2e/pinata-stub.mjs 8098",
+    "test:e2e": "node tests/e2e/flow.mjs"
   },
   "dependencies": {
     "@rainbow-me/rainbowkit": "^2.2.11",
     "@tanstack/react-query": "^5.106.1",
+    "@wagmi/core": "^2.22.1",
     "clsx": "^2.1.1",
     "hash-wasm": "^4.12.0",
     "jspdf": "^4.2.1",
